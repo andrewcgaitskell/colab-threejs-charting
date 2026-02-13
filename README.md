@@ -2,6 +2,10 @@
 
 A simple, clean demonstration of building interactive 3D visualizations using Python, Quart, Jinja2, and Three.js in Google Colab.
 
+![Preview](https://github.com/user-attachments/assets/9e94b02c-978f-4bbf-893f-31cebcf342b6)
+
+*Interactive 3D bar chart showing quarterly sales data*
+
 ## Overview
 
 This notebook shows how to:
@@ -16,23 +20,32 @@ This notebook shows how to:
 ### Running in Google Colab
 
 1. **Open the notebook in Colab:**
+   - Go to [Google Colab](https://colab.research.google.com/)
    - Upload `quart_threejs_demo.ipynb` to Google Colab
-   - Or use: `File → Open notebook → GitHub` and enter this repository URL
+   - Or use: `File → Open notebook → GitHub` and paste this repository URL
 
-2. **Run all cells** in order:
-   - Cell 1: Install dependencies
+2. **Run all cells** in order (Runtime → Run all, or Ctrl+F9):
+   - Cell 1: Install dependencies (takes ~30 seconds)
    - Cell 2: Create sample data
    - Cell 3: Set up Quart app
-   - Cell 4: Start ngrok tunnel
-   - Cell 5: Run server
-   - Cell 6: (Optional) Cleanup
+   - Cell 4: Start ngrok tunnel (generates public URL)
+   - Cell 5: Run server (keeps running)
+   - Cell 6: (Optional) Cleanup when done
 
 3. **View the visualization:**
-   - Click the public URL generated in Cell 4
+   - Click the ngrok public URL generated in Cell 4 or 5
    - Interact with the 3D chart:
-     - **Drag** to rotate
-     - **Scroll** to zoom
-     - **Right-click** to pan
+     - **Drag** to rotate the view
+     - **Scroll** to zoom in/out
+     - **Right-click** to pan (if needed)
+
+### Example Output
+
+When you run the notebook, you'll see:
+- A 3D bar chart with 16 bars (4 products × 4 quarters)
+- Each product has a different color (Blue, Red, Green, Orange)
+- Interactive controls for exploring the data
+- Grid and axes for orientation
 
 ## What You'll See
 
