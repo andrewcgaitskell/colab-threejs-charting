@@ -15,7 +15,6 @@ This notebook shows how to:
 - Build an async web server with **Quart**
 - Render templates with **Jinja2**
 - Create interactive 3D charts with **Three.js**
-- Make the app accessible via **ngrok**
 
 ## Quick Start
 
@@ -30,12 +29,11 @@ This notebook shows how to:
    - Cell 1: Install dependencies (takes ~30 seconds)
    - Cell 2: Create sample data
    - Cell 3: Set up Quart app
-   - Cell 4: Start ngrok tunnel (generates public URL)
-   - Cell 5: Run server (keeps running)
-   - Cell 6: (Optional) Cleanup when done
+   - Cell 4: Run server (keeps running)
 
 3. **View the visualization:**
-   - Click the ngrok public URL generated in Cell 4 or 5
+   - The server runs on localhost:5000
+   - In Google Colab, you can use port forwarding or other tools to access the local server
    - Interact with the 3D chart:
      - **Drag** to rotate the view
      - **Scroll** to zoom in/out
@@ -67,7 +65,6 @@ Each bar represents sales volume for a specific product in a specific quarter (Q
 | **Jinja2** | HTML templating engine |
 | **Three.js** | 3D graphics library for WebGL |
 | **Pandas** | Data manipulation |
-| **pyngrok** | Tunneling for Colab access |
 
 ## Data Flow
 
@@ -90,9 +87,7 @@ The notebook is organized into clear sections:
 1. **Dependencies**: Install required packages
 2. **Data Creation**: Generate sample data with Pandas
 3. **Quart App**: Define routes and Jinja2 template
-4. **Ngrok Setup**: Create public tunnel
-5. **Server Launch**: Run the application
-6. **Cleanup**: Stop the tunnel
+4. **Server Launch**: Run the application
 
 ## Customization
 
@@ -138,28 +133,23 @@ This pattern is ideal for:
 
 The notebook automatically installs these packages:
 - `quart` - Async web framework
-- `pyngrok` - Ngrok tunneling
 - `pandas` - Data manipulation
 - `numpy` - Numerical operations
+- `requests` - HTTP library for loading templates
 
 No pre-installation needed in Colab!
 
 ## Notes
 
 - The server runs continuously until interrupted
-- Each run creates a new ngrok URL
-- Free ngrok URLs expire after ~2 hours
-- The notebook uses `nest_asyncio` to work in Colab's environment
+- The server runs on localhost:5000
+- In Google Colab, you may need to use port forwarding to access localhost
 
 ## Troubleshooting
 
 ### Server won't start
 - Make sure all cells are run in order
 - Check that no other process is using port 5000
-
-### Ngrok URL doesn't work
-- Try regenerating the tunnel (re-run Cell 4)
-- Check your firewall settings
 
 ### Chart doesn't display
 - Ensure Three.js CDN is accessible
