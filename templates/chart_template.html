@@ -34,6 +34,8 @@
 
     <!-- Include Three.js from local file -->
     <script src="./three/build/three.min.js"></script>
+    <!-- Include OrbitControls from local file -->
+    <script src="./three/examples/jsm/controls/OrbitControls.js"></script>
     <script>
         // Data passed from Python via Jinja2
         const chartData = {{ data | tojson }};
@@ -57,6 +59,18 @@
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(renderer.domElement);
+        
+        // Set up OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.enableZoom = true;
+        controls.zoomSpeed = 1.2;
+        controls.minDistance = 5;
+        controls.maxDistance = 50;
+        controls.enableRotate = true;
+        controls.enablePan = true;
+        controls.target.set(0, 3, 0); // Look at center of bars
         
         // Add lights
         const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
@@ -109,62 +123,10 @@
         const axesHelper = new THREE.AxesHelper(10);
         scene.add(axesHelper);
         
-        // Mouse controls for rotation
-        let isDragging = false;
-        let previousMousePosition = { x: 0, y: 0 };
-        let rotation = { x: 0, y: 0 };
-        
-        container.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            previousMousePosition = { x: e.clientX, y: e.clientY };
-        });
-        
-        container.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                const deltaX = e.clientX - previousMousePosition.x;
-                const deltaY = e.clientY - previousMousePosition.y;
-                
-                rotation.y += deltaX * 0.01;
-                rotation.x += deltaY * 0.01;
-                
-                previousMousePosition = { x: e.clientX, y: e.clientY };
-            }
-        });
-        
-        container.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-        
-        container.addEventListener('mouseleave', () => {
-            isDragging = false;
-        });
-        
-        // Zoom with mouse wheel - with improved handling
-        container.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const zoomSpeed = 0.001;
-            const delta = e.deltaY * zoomSpeed;
-            camera.position.multiplyScalar(1 + delta);
-            
-            // Clamp zoom distance
-            const distance = camera.position.length();
-            if (distance < 5) {
-                camera.position.normalize().multiplyScalar(5);
-            } else if (distance > 50) {
-                camera.position.normalize().multiplyScalar(50);
-            }
-        }, { passive: false });
-        
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            
-            // Apply rotation
-            camera.position.x = 15 * Math.cos(rotation.y) * Math.cos(rotation.x);
-            camera.position.y = 15 * Math.sin(rotation.x) + 10;
-            camera.position.z = 15 * Math.sin(rotation.y) * Math.cos(rotation.x);
-            camera.lookAt(0, 3, 0);
-            
+            controls.update(); // Update controls for damping
             renderer.render(scene, camera);
         }
         
@@ -174,6 +136,11 @@
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
+        
+        // Prevent default scroll behavior to enable zoom
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+        }, { passive: false });
         
         // Start animation
         animate();
