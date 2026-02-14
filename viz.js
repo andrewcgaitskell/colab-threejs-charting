@@ -56,7 +56,7 @@ function createPointCloud(scene, data, THREE) {
     
     const material = new THREE.PointsMaterial({
         size: data.pointSize || 0.05,
-        vertexColors: colors ? true : false
+        vertexColors: !!colors
     });
     
     const pointCloud = new THREE.Points(geometry, material);

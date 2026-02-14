@@ -17,19 +17,28 @@ class Viz:
     def show(self, width=900, height=600):
         """Save data and display"""
         # Save data
-        with open('data.json', 'w') as f:
-            json.dump(self.data, f)
+        try:
+            with open('data.json', 'w') as f:
+                json.dump(self.data, f)
+        except (TypeError, ValueError) as e:
+            raise ValueError(f"Failed to serialize data to JSON. Check that all data is JSON-serializable: {e}")
         
         # Display
         return IFrame('viz.html', width=width, height=height)
     
     def save(self, filename='viz_export.html'):
         """Export single HTML file with embedded data"""
-        with open('viz.html', 'r') as f:
-            html = f.read()
+        try:
+            with open('viz.html', 'r') as f:
+                html = f.read()
+        except FileNotFoundError:
+            raise FileNotFoundError("Template file 'viz.html' not found. Ensure viz.html is in the working directory.")
         
-        with open('viz.js', 'r') as f:
-            js = f.read()
+        try:
+            with open('viz.js', 'r') as f:
+                js = f.read()
+        except FileNotFoundError:
+            raise FileNotFoundError("Template file 'viz.js' not found. Ensure viz.js is in the working directory.")
         
         # Embed data and JS
         data_json = json.dumps(self.data)
