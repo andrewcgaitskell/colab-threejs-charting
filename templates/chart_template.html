@@ -32,8 +32,8 @@
     <div id="chart-container"></div>
     <div class="info">Drag to rotate • Scroll to zoom • Right-click to pan</div>
 
-    <!-- Include Three.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Include Three.js from local file -->
+    <script src="./three/build/three.min.js"></script>
     <script>
         // Data passed from Python via Jinja2
         const chartData = {{ data | tojson }};
@@ -135,11 +135,25 @@
             isDragging = false;
         });
         
-        // Zoom with mouse wheel
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+        
+        // Zoom with mouse wheel - with improved handling
         container.addEventListener('wheel', (e) => {
             e.preventDefault();
-            camera.position.multiplyScalar(1 + e.deltaY * 0.001);
-        });
+            const zoomSpeed = 0.001;
+            const delta = e.deltaY * zoomSpeed;
+            camera.position.multiplyScalar(1 + delta);
+            
+            // Clamp zoom distance
+            const distance = camera.position.length();
+            if (distance < 5) {
+                camera.position.normalize().multiplyScalar(5);
+            } else if (distance > 50) {
+                camera.position.normalize().multiplyScalar(50);
+            }
+        }, { passive: false });
         
         // Animation loop
         function animate() {
