@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Bar Chart - Quart + Three.js</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #chart-container {
+            width: 100%;
+            height: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .info {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quarterly Sales - 3D Bar Chart</h1>
+    <div id="chart-container"></div>
+    <div class="info">Drag to rotate • Scroll to zoom • Right-click to pan</div>
+
+    <!-- Include Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Data passed from Python via Jinja2
+        const chartData = {{ data | tojson }};
+        
+        // Set up the scene
+        const container = document.getElementById('chart-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        
+        // Set up camera
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            container.clientWidth / container.clientHeight,
+            0.1,
+            1000
+        );
+        camera.position.set(15, 15, 15);
+        camera.lookAt(0, 0, 0);
+        
+        // Set up renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+        
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(10, 10, 10);
+        scene.add(directionalLight);
+        
+        // Create 3D bars from data
+        const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
+        const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12]; // Blue, Red, Green, Orange
+        
+        chartData.forEach((product, productIndex) => {
+            quarters.forEach((quarter, quarterIndex) => {
+                const value = product[quarter];
+                const height = value / 10; // Scale height
+                
+                // Create bar geometry
+                const geometry = new THREE.BoxGeometry(1.5, height, 1.5);
+                const material = new THREE.MeshPhongMaterial({ 
+                    color: colors[productIndex],
+                    shininess: 100
+                });
+                const bar = new THREE.Mesh(geometry, material);
+                
+                // Position the bar
+                const x = productIndex * 4 - 6;
+                const z = quarterIndex * 4 - 6;
+                bar.position.set(x, height / 2, z);
+                
+                scene.add(bar);
+                
+                // Add edge lines for better visibility
+                const edges = new THREE.EdgesGeometry(geometry);
+                const line = new THREE.LineSegments(
+                    edges,
+                    new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 1 })
+                );
+                line.position.copy(bar.position);
+                scene.add(line);
+            });
+        });
+        
+        // Add grid helper for reference
+        const gridHelper = new THREE.GridHelper(20, 20, 0xcccccc, 0xeeeeee);
+        scene.add(gridHelper);
+        
+        // Add axes helper
+        const axesHelper = new THREE.AxesHelper(10);
+        scene.add(axesHelper);
+        
+        // Mouse controls for rotation
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let rotation = { x: 0, y: 0 };
+        
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        
+        container.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                
+                rotation.y += deltaX * 0.01;
+                rotation.x += deltaY * 0.01;
+                
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+        
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        // Zoom with mouse wheel
+        container.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            camera.position.multiplyScalar(1 + e.deltaY * 0.001);
+        });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Apply rotation
+            camera.position.x = 15 * Math.cos(rotation.y) * Math.cos(rotation.x);
+            camera.position.y = 15 * Math.sin(rotation.x) + 10;
+            camera.position.z = 15 * Math.sin(rotation.y) * Math.cos(rotation.x);
+            camera.lookAt(0, 3, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+        
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>

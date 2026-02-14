@@ -1,5 +1,7 @@
 # Quart + Jinja2 + Three.js Charting Demo
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/quart_threejs_demo.ipynb)
+
 A simple, clean demonstration of building interactive 3D visualizations using Python, Quart, Jinja2, and Three.js in Google Colab.
 
 ![Preview](https://github.com/user-attachments/assets/9e94b02c-978f-4bbf-893f-31cebcf342b6)
