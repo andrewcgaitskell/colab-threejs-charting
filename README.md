@@ -1,8 +1,9 @@
 # Quart + Jinja2 + Three.js Charting Demo
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/quart_threejs_demo.ipynb)
+[![Open In Colab - Quart](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/quart_threejs_demo.ipynb)
+[![Open In Colab - Simple](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/simple_threejs_demo.ipynb)
 
-A simple, clean demonstration of building interactive 3D visualizations using Python, Quart, Jinja2, and Three.js in Google Colab.
+A demonstration of building interactive 3D visualizations using Python and Three.js in Google Colab with two different approaches.
 
 ![Preview](https://github.com/user-attachments/assets/9e94b02c-978f-4bbf-893f-31cebcf342b6)
 
@@ -10,7 +11,41 @@ A simple, clean demonstration of building interactive 3D visualizations using Py
 
 ## Overview
 
-This notebook shows how to:
+This repository provides two approaches for creating interactive 3D visualizations using Three.js in Google Colab.
+
+## Two Approaches
+
+This repository now offers two ways to create Three.js visualizations in Colab:
+
+### 1. **Quart Server Approach** (Original)
+- Uses Quart web server + Jinja2 templates
+- Great for complex dashboards and multi-page apps
+- Requires server setup
+- See: `quart_threejs_demo.ipynb`
+
+### 2. **Simple Direct Approach** (New)
+- No server required - pure HTML/JS
+- Minimal setup, secure data passing
+- Perfect for quick visualizations
+- See: `simple_threejs_demo.ipynb`
+
+Quick comparison:
+
+| Feature | Quart Approach | Simple Approach |
+|---------|---------------|-----------------|
+| Setup | Install Quart, run server | Import viz.py |
+| Use Case | Dashboards, complex apps | Quick visualizations |
+| Files Generated | Templates + server | Single HTML file |
+| Data Passing | Jinja2 templating | JSON + secure validation |
+| Security | Template-based | Data/code separation |
+
+Choose based on your needs:
+- **Quick 3D plots?** → Use Simple Approach
+- **Full dashboard?** → Use Quart Approach
+
+## Quart Approach Overview
+
+The Quart approach shows how to:
 - Generate data with **Pandas**
 - Build an async web server with **Quart**
 - Render templates with **Jinja2**
