@@ -32,11 +32,20 @@
     <div id="chart-container"></div>
     <div class="info">Drag to rotate • Scroll to zoom • Right-click to pan</div>
 
-    <!-- Include Three.js from local file -->
-    <script src="./three/build/three.min.js"></script>
-    <!-- Include OrbitControls from local file -->
-    <script src="./three/examples/jsm/controls/OrbitControls.js"></script>
-    <script>
+    <!-- Use import maps for local ES modules -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "/three/build/three.module.js",
+            "three/addons/": "/three/examples/jsm/"
+        }
+    }
+    </script>
+    
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        
         // Data passed from Python via Jinja2
         const chartData = {{ data | tojson }};
         
@@ -53,7 +62,7 @@
             1000
         );
         camera.position.set(15, 15, 15);
-        camera.lookAt(0, 0, 0);
+        camera.lookAt(0, 3, 0);
         
         // Set up renderer
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -61,7 +70,7 @@
         container.appendChild(renderer.domElement);
         
         // Set up OrbitControls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.enableZoom = true;
@@ -70,7 +79,7 @@
         controls.maxDistance = 50;
         controls.enableRotate = true;
         controls.enablePan = true;
-        controls.target.set(0, 3, 0); // Look at center of bars
+        controls.target.set(0, 3, 0);
         
         // Add lights
         const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
@@ -82,14 +91,13 @@
         
         // Create 3D bars from data
         const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-        const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12]; // Blue, Red, Green, Orange
+        const colors = [0x3498db, 0xe74c3c, 0x2ecc71, 0xf39c12];
         
         chartData.forEach((product, productIndex) => {
             quarters.forEach((quarter, quarterIndex) => {
                 const value = product[quarter];
-                const height = value / 10; // Scale height
+                const height = value / 10;
                 
-                // Create bar geometry
                 const geometry = new THREE.BoxGeometry(1.5, height, 1.5);
                 const material = new THREE.MeshPhongMaterial({ 
                     color: colors[productIndex],
@@ -97,14 +105,12 @@
                 });
                 const bar = new THREE.Mesh(geometry, material);
                 
-                // Position the bar
                 const x = productIndex * 4 - 6;
                 const z = quarterIndex * 4 - 6;
                 bar.position.set(x, height / 2, z);
                 
                 scene.add(bar);
                 
-                // Add edge lines for better visibility
                 const edges = new THREE.EdgesGeometry(geometry);
                 const line = new THREE.LineSegments(
                     edges,
@@ -115,34 +121,28 @@
             });
         });
         
-        // Add grid helper for reference
         const gridHelper = new THREE.GridHelper(20, 20, 0xcccccc, 0xeeeeee);
         scene.add(gridHelper);
         
-        // Add axes helper
         const axesHelper = new THREE.AxesHelper(10);
         scene.add(axesHelper);
         
-        // Animation loop
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); // Update controls for damping
+            controls.update();
             renderer.render(scene, camera);
         }
         
-        // Handle window resize
         window.addEventListener('resize', () => {
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
         
-        // Prevent default scroll behavior to enable zoom
         container.addEventListener('wheel', (e) => {
             e.preventDefault();
         }, { passive: false });
         
-        // Start animation
         animate();
     </script>
 </body>
