@@ -1,13 +1,6 @@
 # Quart + Jinja2 + Three.js Charting Demo
 
-[![Open In Colab - Quart](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/quart_threejs_demo.ipynb)
-[![Open In Colab - Simple](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/andrewcgaitskell/colab-threejs-charting/blob/main/simple_threejs_demo.ipynb)
-
 A demonstration of building interactive 3D visualizations using Python and Three.js in Google Colab with two different approaches.
-
-![Preview](https://github.com/user-attachments/assets/9e94b02c-978f-4bbf-893f-31cebcf342b6)
-
-*Interactive 3D bar chart showing quarterly sales data*
 
 ## Overview
 
