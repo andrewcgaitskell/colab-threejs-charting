@@ -58,6 +58,7 @@ class Viz:
         display(HTML(iframe_html))
         return self
     
+    '''
     def save(self, filename='viz_export.html'):
         """Export single HTML file with embedded data"""
         try:
@@ -90,3 +91,4 @@ class Viz:
         
         print(f"✅ Saved to {filename}")
         return self
+    '''
