@@ -1,5 +1,5 @@
 # Cell 1: Install Dependencies and Setup
-!pip install -q quart nest-asyncio
+## !pip install -q quart nest-asyncio
 
 import nest_asyncio
 import os
