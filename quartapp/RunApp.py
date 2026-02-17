@@ -1,10 +1,12 @@
-# Cell 2: RUN THE SERVER
+# RUN THE SERVER
 import asyncio
 import os
 from google.colab import output
 
 # Change to app directory
-os.chdir('/content/simple')
+
+base_dir = os.getcwd()  # Use current working directory
+os.chdir(base_dir)
 
 # Import the app
 from app import app
