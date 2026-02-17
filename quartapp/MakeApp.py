@@ -832,7 +832,11 @@ print('✅ Created: static/css/style.css (Enhanced)')
 # File 6: data/test.json
 # ============================================================================
 sample_data = [
-    {"x": i/10, "y": (i**2)/100, "z": (i**1.5)/50}
+    {
+        "x": i/10, 
+        "y": (i**2)/100, 
+        "z": (i**3)/1000  # Simple cubic function instead
+    }
     for i in range(-50, 51)
 ]
 
