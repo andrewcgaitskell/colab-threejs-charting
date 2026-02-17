@@ -7,8 +7,8 @@ import json
 
 nest_asyncio.apply()
 
-# Create directory structure
-base_dir = '/content/simple'
+# Create directory structure in current folder
+base_dir = os.getcwd()  # Use current working directory
 dirs = [
     f'{base_dir}/templates',
     f'{base_dir}/static/js',
@@ -20,6 +20,7 @@ for dir_path in dirs:
     os.makedirs(dir_path, exist_ok=True)
 
 print('✅ Directory structure created\n')
+print(f'📁 Base directory: {base_dir}')
 
 # ============================================================================
 # File 1: app.py
@@ -868,4 +869,11 @@ Production-hardened Three.js visualization running in Google Colab with Quart ba
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+        pip install -r requirements.txt'''
+
+with open(f'{base_dir}/ReadMe.md', 'w') as f:
+    f.write(readme)
+print('✅ Created: ReadMe.md')
+
+
+
